@@ -37,11 +37,11 @@ MQTT_USERNAME = "admin"
 MQTT_PASSWORD = "***********"
 
 # MAX number of MQTT messages per hour. Assumption is that incoming messages are evenly spread in time
-# EXAMPLE 1: 1 per hour, 12: every 5min, 60: every 1min, 720; every 5sec, 3600: every 1sec
+# EXAMPLE 1: 1 per hour, 12: every 5min, 60: every 1min, 720; every 5sec, 3600: every 1sec, 3601: every telegram
 # Actual rate will never be higher than P1 dsmr messag rate
-# MQTT_MAXRATE = [1..3600]
+# MQTT_MAXRATE = [1..3601]
 # MQTT_MAXRATE = 720
-MQTT_MAXRATE = 60
+MQTT_MAXRATE = 3601
 
 if PRODUCTION:
   MQTT_TOPIC_PREFIX = "dsmr"
