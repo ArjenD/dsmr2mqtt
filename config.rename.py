@@ -29,11 +29,11 @@ SIMULATORFILE = "test/dsmr.raw"
 
 # [ MQTT Parameters ]
 # Using local dns names is not always reliable with PAHO
-MQTT_BROKER = "192.168.1.1"
+MQTT_BROKER = "mqtt.lan"
 MQTT_PORT = 1883
 MQTT_CLIENT_UNIQ_ID = 'mqtt-dsmr'
 MQTT_QOS = 1
-MQTT_USERNAME = "username"
+MQTT_USERNAME = "admin"
 MQTT_PASSWORD = "***********"
 
 # MAX number of MQTT messages per hour. Assumption is that incoming messages are evenly spread in time
@@ -65,6 +65,6 @@ HA_DELETECONFIG = True
 HA_DISCOVERY_RATE = 12
 
 # [ P1 USB serial ]
-# ser_port = "/dev/ttyUSB0"
-ser_port = "/dev/tty-dsmr"
+ser_port = "/dev/ttyUSB0"
+#ser_port = "/dev/tty-dsmr"
 ser_baudrate = 115200
