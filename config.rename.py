@@ -29,19 +29,19 @@ SIMULATORFILE = "test/dsmr.raw"
 
 # [ MQTT Parameters ]
 # Using local dns names is not always reliable with PAHO
-MQTT_BROKER = "192.168.1.1"
+MQTT_BROKER = "mqtt.lan"
 MQTT_PORT = 1883
 MQTT_CLIENT_UNIQ_ID = 'mqtt-dsmr'
 MQTT_QOS = 1
-MQTT_USERNAME = "username"
+MQTT_USERNAME = "admin"
 MQTT_PASSWORD = "***********"
 
 # MAX number of MQTT messages per hour. Assumption is that incoming messages are evenly spread in time
-# EXAMPLE 1: 1 per hour, 12: every 5min, 60: every 1min, 720; every 5sec, 3600: every 1sec
+# EXAMPLE 1: 1 per hour, 12: every 5min, 60: every 1min, 720; every 5sec, 3600: every 1sec, 3601: every telegram
 # Actual rate will never be higher than P1 dsmr messag rate
-# MQTT_MAXRATE = [1..3600]
+# MQTT_MAXRATE = [1..3601]
 # MQTT_MAXRATE = 720
-MQTT_MAXRATE = 60
+MQTT_MAXRATE = 3601
 
 if PRODUCTION:
   MQTT_TOPIC_PREFIX = "dsmr"
@@ -65,6 +65,6 @@ HA_DELETECONFIG = True
 HA_DISCOVERY_RATE = 12
 
 # [ P1 USB serial ]
-# ser_port = "/dev/ttyUSB0"
-ser_port = "/dev/tty-dsmr"
+ser_port = "/dev/ttyUSB0"
+#ser_port = "/dev/tty-dsmr"
 ser_baudrate = 115200
