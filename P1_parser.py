@@ -55,7 +55,7 @@ class ParseTelegrams(threading.Thread):
     self.__prev_ts = 0
 
     assert cfg.MQTT_MAXRATE > 0, "MQTT_MAXRATE outside range 1.3600"
-    assert cfg.MQTT_MAXRATE <= 3600, "MQTT_MAXRATE outside range 1.3600"
+    assert cfg.MQTT_MAXRATE <= 3601, "MQTT_MAXRATE outside range 1.3601"
     self.__min_ts_interval = int(3600 / cfg.MQTT_MAXRATE)
 
     # Count number of topics which will always be included in MQTT json
