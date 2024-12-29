@@ -92,8 +92,8 @@ class TaskReadSerial(threading.Thread):
     """
       Add a virtual dsmr entry, which is sum of tariff 1 and tariff 2
 
-      "1-0:1.8.1" + "1-0:1.8.2" --> "1-0:1.8.3"
-      "1-0:2.8.1" + "1-0:2.8.2" --> "1-0:2.8.3"
+      "1-0:1.8.1" + "1-0:1.8.2" --> "1-0:1.8.0"
+      "1-0:2.8.1" + "1-0:2.8.2" --> "1-0:2.8.0"
 
       1-0:1.8.1(016230.132*kWh)
       1-0:1.8.2(007449.542*kWh)
@@ -105,7 +105,21 @@ class TaskReadSerial(threading.Thread):
     """
 
     e_consumed = 0.0
-    e_returned = 0.0
+    e_returned = 0.0  
+
+    l1 = 0.0
+    l2 = 0.0
+    l3 = 0.0
+
+    p1 = 0.0
+    p2 = 0.0
+    p3 = 0.0
+
+    v1 = 0.0
+    v2 = 0.0
+    v3 = 0.0
+
+
 
     for element in self.__telegram:
       try:
@@ -131,15 +145,95 @@ class TaskReadSerial(threading.Thread):
         e_returned = e_returned + float(value)
       except AttributeError:
         pass
+      
+      try:
+        value = re.match(r"1-0:21\.7\.0\((\d{2}\.\d{3})\*kW\)", element).group(1)
+        p1 = p1 + ( float(value) * 1000 )
+      except AttributeError:
+        pass
+
+      try:
+        value = re.match(r"1-0:41\.7\.0\((\d{2}\.\d{3})\*kW\)", element).group(1)
+        p2 = p2 +  ( float(value) * 1000 )
+      except AttributeError:
+        pass
+
+      try:
+        value = re.match(r"1-0:61\.7\.0\((\d{2}\.\d{3})\*kW\)", element).group(1)
+        p3 = p3 +  ( float(value) * 1000 )
+      except AttributeError:
+        pass
+
+      try:
+        value = re.match(r"1-0:22\.7\.0\((\d{2}\.\d{3})\*kW\)", element).group(1)
+        p1 = p1 -  ( float(value) * 1000 )
+      except AttributeError:
+        pass
+
+      try:
+        value = re.match(r"1-0:42\.7\.0\((\d{2}\.\d{3})\*kW\)", element).group(1)
+        p2 = p2 -  ( float(value) * 1000 )
+      except AttributeError:
+        pass
+
+      try:
+        value = re.match(r"1-0:62\.7\.0\((\d{2}\.\d{3})\*kW\)", element).group(1)
+        p3 = p3 -  ( float(value) * 1000 )
+      except AttributeError:
+        pass
+
+      try:
+        value = re.match(r"1-0:32\.7\.0\((\d{3}\.\d{1})\*V\)", element).group(1)
+        v1 = float( value )
+      except AttributeError:
+        pass
+
+      try:
+        value = re.match(r"1-0:52\.7\.0\((\d{3}\.\d{1})\*V\)", element).group(1)
+        v2 = float( value )
+      except AttributeError:
+        pass
+
+      try:
+        value = re.match(r"1-0:72\.7\.0\((\d{3}\.\d{1})\*V\)", element).group(1)
+        v3 = float( value )
+      except AttributeError:
+        pass
+
+    logger.error( f"p1: {p1}" )
+    logger.error( f"p2: {p2}" )
+    logger.error( f"p3: {p3}" )
+    logger.error( f"v1: {v1}" )
+    logger.error( f"v2: {v2}" )
+    logger.error( f"v3: {v3}" )
 
     # Insert the virtual entries in the dsmr telegram
     e_consumed = "{0:10.3f}".format(e_consumed)
-    line = f"1-0:1.8.3({e_consumed}*kWh)"
+    line = f"1-0:1.8.0({e_consumed}*kWh)"
     self.__telegram.append(line)
 
     e_returned = "{0:10.3f}".format(e_returned)
-    line = f"1-0:2.8.3({e_returned}*kWh)"
+    line = f"1-0:2.8.0({e_returned}*kWh)"
     self.__telegram.append(line)
+
+    if ( v1 != 0.0 ) :
+      i1 = "{0:10.3f}".format( p1 / v1 )
+      line = f"1-0:31.7.1({i1}*A)"
+      self.__telegram.append(line)
+
+    if ( v2 != 0.0 ) :
+      i2 = "{0:10.3f}".format( p2 / v2 )
+      line = f"1-0:51.7.1({i2}*A)"
+      self.__telegram.append(line)
+
+    if ( v3 != 0.0 ) :
+      i3 = "{0:10.3f}".format( p3 / v3 )
+      line = f"1-0:71.7.1({i3}*A)"
+      self.__telegram.append(line)
+    
+    logger.error( f"i1: {i1}" )
+    logger.error( f"i2: {i2}" )
+    logger.error( f"i3: {i3}" )
 
   def __read_serial(self):
     """
