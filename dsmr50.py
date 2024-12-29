@@ -158,6 +158,10 @@ definition = {
   ["Gas consumption", "gas", "gas_consumed", "^.*\((.*)\*m3\)",
    "m\u00b3", "float", "1000", "1", "mdi:counter"],
 
+#"0-1:24.2.1":
+#  ["Gas time", "gas", "gas_time", "^.*\((.*)W\)\(.*\*m3\)",
+#   "", "str", "1", "1", "mdi:counter"],
+
 "0-1:96.1.0":
   ["Equipment Identifier", "gas", "serial", "^.*\(\d{26}(.*)\)",
    "", "str", "1", "0", "mdi:tag-text-outline"],
@@ -179,11 +183,11 @@ definition = {
    "Wh", "float", "1000", "1", "mdi:counter"],
 
 # Virtual, not existing in dsmr telegram & specification, to sum tarif 1 & 2 to a single message
-"1-0:1.8.3":
+"1-0:1.8.0":
   ["EL consumed", "el", "el_consumed", "^.*\((.*)\*kWh\)",
    "Wh", "float", "1000", "1", "mdi:counter"],
 
-"1-0:2.8.3":
+"1-0:2.8.0":
   ["EL returned", "el", "el_returned", "^.*\((.*)\*kWh\)",
    "Wh", "float", "1000", "1", "mdi:counter"],
 
@@ -201,17 +205,29 @@ definition = {
 
 # Current seems to be measured in whole integer numbers (1, 2, 3....); if you need accurate current
 # numbers, you better divide Power by Volt to get a more accurate numer
-#"1-0:31.7.0":
-#  ["Current L1", "el", "I1", "^.*\((.*)\*A\)",
-#  "A", "int", "1", "1", "mdi:gauge"],
+"1-0:31.7.0":
+  ["Current L1", "el", "I1", "^.*\((.*)\*A\)",
+  "A", "int", "1", "0", "mdi:gauge"],
 
-#"1-0:51.7.0":
-#  ["Current L2", "el", "I2", "^.*\((.*)\*A\)",
-#  "A", "int", "1", "0", "mdi:gauge"],
+"1-0:51.7.0":
+  ["Current L2", "el", "I2", "^.*\((.*)\*A\)",
+  "A", "int", "1", "0", "mdi:gauge"],
 
-#"1-0:71.7.0":
-#  ["Current L3", "el", "I3", "^.*\((.*)\*A\)",
-#  "A", "int", "1", "0", "mdi:gauge"],
+"1-0:71.7.0":
+  ["Current L3", "el", "I3", "^.*\((.*)\*A\)",
+  "A", "int", "1", "0", "mdi:gauge"],
+
+"1-0:31.7.1":
+  ["Current L1", "el", "Current_L1", "^.*\((.*)\*A\)",
+  "A", "float", "1", "1", "mdi:gauge"],
+
+"1-0:51.7.1":
+  ["Current L2", "el", "Current_L2", "^.*\((.*)\*A\)",
+  "A", "float", "1", "1", "mdi:gauge"],
+
+"1-0:71.7.1":
+  ["Current L3", "el", "Current_L3", "^.*\((.*)\*A\)",
+  "A", "float", "1", "1", "mdi:gauge"],
 
 "1-0:32.36.0":
   ["Voltage swells L1", "el", "V1_swells", "^.*\((.*)\)",
