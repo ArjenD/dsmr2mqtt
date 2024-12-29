@@ -153,13 +153,15 @@ class ParseTelegrams(threading.Thread):
     # mqtt message and store current timestamp
     if (ts - self.__prev_ts) > self.__min_ts_interval:
       self.__prev_ts = ts
-
+      
       for element in telegram:
         try:
           # Extract the identifier (eg "1-0:1.8.1") of the element
           # and use this as index for dsmr.definition
           index = re.match(r"(\d{0,3}-\d{0,3}:\d{0,3}\.\d{0,3}\.\d{0,3}).*", element).group(1)
           self.__decode_telegram_element(index, element, ts, listofjsondicts)
+
+          self.__mqtt.do_publish("dsmr/telegram/" + index, "{ \"" + element + "\" }", retain=False)
 
         except Exception as e:
           logger.debug(f"Exception {e}")
